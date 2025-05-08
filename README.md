@@ -60,9 +60,9 @@ _No project files or solution required—just the single `WindowsKeyRemapper.cpp
 1. Open **Developer Command Prompt for VS 2019+**.  
 2. Navigate to the folder containing `WindowsKeyRemapper.cpp`.  
 3. Run:
-   ```bat
-   cl /EHsc /std:c++17 WindowsKeyRemapper.cpp /link user32.lib gdi32.lib comctl32.lib
-````
+   ```bash
+   cl /EHsc /std:c++17 WindowsKeyRemapper.cpp /link user32.lib gdi32.lib comctl32.lib```
+
 
 4. This produces `WindowsKeyRemapper.exe` in the same folder.
 
