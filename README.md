@@ -1,76 +1,95 @@
+Thought for a few seconds
 
+
+````markdown
 # WindowsKeyRemapper v7.3
 
 ![Screenshot of WindowsKeyRemapper UI](https://i.imgur.com/lgnE4Pl.png)
 
-**WindowsKeyRemapper** is a small Win32-based utility that lets you redefine up to **five** simultaneous key-to-key mappings on Windows. It provides a simple visual UI, a toggle hotkey to enable/disable remapping at runtime, and a reset button to clear all mappings. Mappings persist across sessions in a JSON file (`mappings.json`).
+**WindowsKeyRemapper** is a single-source Win32 utility that lets you redefine up to **five** simultaneous key-to-key mappings on Windows, with:
+
+- A simple grid UI of all QWERTY keys + Fn keys  
+- A runtime **Toggle** hotkey to enable/disable remaps  
+- A **Reset** button to clear all mappings  
+- Persistent storage in `mappings.json`  
 
 ---
 
 ## Features
 
-* **Up to 5 concurrent mappings**
-  Click a “source” key button, then click a “target” key button to swap them.
-* **Runtime toggle**
-  Define a dedicated toggle key (default: ▼) to quickly enable/disable all remaps.
-* **Reset button**
-  Clear all current mappings with a single click.
-* **Persistent storage**
-  All mappings are saved in `mappings.json` on exit and reloaded on startup.
-* **Low-level hook with proper repeat handling**
-  Uses a `WH_KEYBOARD_LL` hook to capture key events, preserve Alt+Tab/Esc, and support key-up/down correctly.
-* **Verbose console log**
-  Displays active remaps and status messages in a built-in console panel.
+- **Up to 5 concurrent mappings**  
+  Click a “source” key, then click a “target” key to swap them.  
+- **Runtime toggle**  
+  Choose a global hotkey (default: ▼) to pause/resume remapping.  
+- **Reset button**  
+  Clear every mapping in one click.  
+- **Persistent storage**  
+  Saves to and loads from `mappings.json` in the same folder.  
+- **Low-level keyboard hook**  
+  Captures with `WH_KEYBOARD_LL`, preserves Alt+Tab/Esc, and handles key-up/down/repeats correctly.  
+- **Built-in console log**  
+  See active mappings and status messages at runtime.  
 
 ---
 
 ## How It Works
 
-1. **UI Layout**
+1. **UI Layout**  
+   - A button for each key on a standard QWERTY + F1–F12.  
+   - Below: **Set Hotkey**, **Toggle**, **Reset**.  
+   - Status bar + multi-line console.  
 
-   * A grid of buttons represents every key on a standard QWERTY keyboard plus function keys.
-   * “Reset”, “Toggle” and “Set Hotkey” buttons sit below.
-   * A status bar and multi-line console show current mappings and log messages.
+2. **Mapping Workflow**  
+   1. Click the **source** key you want to remap (e.g. `Space`).  
+   2. Click the **target** key you’d like it to send (e.g. `LAlt`).  
+   3. You can define up to five; extras are refused with a “Max 5 reached” message.  
 
-2. **Mapping Workflow**
+3. **Toggle Hotkey**  
+   - Click **Set Hotkey**, press any key to assign your on/off toggle.  
+   - Press this hotkey during runtime to enable/disable all remaps on the fly.  
 
-   * **Select source**: click the button of the key you wish to remap (e.g. `Space`).
-   * **Select target**: click the button of the key you want to send instead (e.g. `LAlt`).
-   * Up to **five** mappings can be defined. Extra attempts will show “Max 5 reached.”
-
-3. **Toggle Hotkey**
-
-   * Click **Set Hotkey**, then press any key to assign it as your global on/off toggle.
-   * While running, press your toggle key to pause/resume all remaps.
-
-4. **Persistence**
-
-   * Mappings are serialized to `mappings.json` in the same directory.
-   * On next launch, the program reloads your last configuration.
+4. **Persistence**  
+   - Mappings are written to `mappings.json` on exit.  
+   - On launch, the JSON is reloaded so your configuration carries over.  
 
 ---
 
-## Building
+## Quick Compile Guide
 
-1. **Requirements**
+_No project files or solution required—just the single `WindowsKeyRemapper.cpp` and a modern C++ compiler._
 
-   * Windows 7 or later
-   * Visual Studio 2019+ (MSVC toolchain)
-   * Windows SDK (for `<windows.h>`, `<commctrl.h>`)
+### Using MSVC (Developer Command Prompt)
 
-2. **Steps**
-
+1. Open **Developer Command Prompt for VS 2019+**.  
+2. Navigate to the folder containing `WindowsKeyRemapper.cpp`.  
+3. Run:
    ```bat
-   git clone https://github.com/yourusername/WindowsKeyRemapper.git
-   cd WindowsKeyRemapper
-   rem Build the `WindowsKeyRemapper` Visual Studio solution in Release x64
-   devenv WindowsKeyRemapper.sln /Build Release /Project WindowsKeyRemapper
+   cl /EHsc /std:c++17 WindowsKeyRemapper.cpp /link user32.lib gdi32.lib comctl32.lib
+````
+
+4. This produces `WindowsKeyRemapper.exe` in the same folder.
+
+### Using MinGW-w64 (Git Bash or CMD)
+
+1. Install MinGW-w64 and ensure `g++` is on your `PATH`.
+2. In a terminal, CD to where `WindowsKeyRemapper.cpp` lives.
+3. Run:
+
+   ```bash
+   g++ -std=c++17 -municode WindowsKeyRemapper.cpp -o WindowsKeyRemapper.exe \
+       -luser32 -lgdi32 -lcomctl32
    ```
+4. You’ll get `WindowsKeyRemapper.exe`.
 
-3. **Deploy**
+---
 
-   * Copy `WindowsKeyRemapper.exe` alongside `mappings.json` (will be auto-created).
-   * Run the EXE; remappings activate immediately.
+## Deployment
+
+1. Copy **only**:
+
+   * `WindowsKeyRemapper.exe`
+   * (optional) your existing `mappings.json`
+2. Run the EXE—your remaps and toggle hotkey are ready immediately.
 
 ---
 
@@ -78,28 +97,20 @@
 
 * **Bind “Jump” to Left Alt**
 
-  1. Click the **Space** button.
-  2. Click the **LAlt** button.
-  3. Now pressing Space will send Left Alt.
+  1. Click **Space** → then **LAlt**.
+  2. Press your toggle key to enable; now Space sends LAlt.
 
 * **Bind “Esc” to Right Alt**
 
   1. Click **Esc** → then **RAlt**.
-  2. Press your toggle key to pause/resume remapping as needed.
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feat/awesome`)
-3. Commit your changes (`git commit -am 'Add awesome feature'`)
-4. Push to the branch (`git push origin feat/awesome`)
-5. Open a PR against `main`
+  2. Toggle on/off as needed.
 
 ---
 
 ## License
 
-This project is released under the **GNU General Public License v3.0**.
-See [LICENSE](LICENSE) for full details.
+This tool is released under the **GNU GPL v3.0**.
+See [LICENSE](LICENSE) for details.
+
+```
+```
