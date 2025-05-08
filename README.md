@@ -1,7 +1,4 @@
-Thought for a few seconds
 
-
-````markdown
 # WindowsKeyRemapper v7.3
 
 ![Screenshot of WindowsKeyRemapper UI](https://i.imgur.com/lgnE4Pl.png)
@@ -113,4 +110,4 @@ This tool is released under the **GNU GPL v3.0**.
 See [LICENSE](LICENSE) for details.
 
 ```
-```
+
